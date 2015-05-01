@@ -1,6 +1,8 @@
 public class Task50 {
 
-    private static final int SIEVE_SIZE = 50; //1000000;
+    private static final int MAX_NUMBER = 1000000;
+
+    private static final int SIEVE_SIZE = MAX_NUMBER+1; //1000000;
     private static final int SIEVE_CELLS = (SIEVE_SIZE)/64+1;
 
     // contains 1 for non prime numbers
@@ -18,6 +20,10 @@ public class Task50 {
         return from;
     }
 
+    public static boolean isPrime(int number) {
+        return (sieve[number/64]&(1L<<(number%64)))==0;
+    }
+
     public static void main(String[] args) {
         int current = 1;
         int primeCount = 0;
@@ -25,24 +31,37 @@ public class Task50 {
             current++;
             while ((sieve[current/64]&(1L<<(current%64)))!=0) current++;
             if (current<SIEVE_SIZE) {
-//                System.out.println("Prime=" + current);
                 primeCount++;
             }
             for(int i=current*2;i<SIEVE_SIZE;i+=current) {
                 sieve[i/64] |= 1L<<(i%64);
             }
         } while(current<SIEVE_SIZE);
-        System.out.println("Prime numbers found " + primeCount);
-        // for each prime starting from greatest
-       
-        current = 1;
-        int seqEnd = 0;
-        int seqLength = 0;
+
+        int currentStart = 1;
+        int currentEnd = 1;
+        int maxSeqFound = 0;
+        int maxSeqValue = 0;
+        int sum;
+        int length;
         do {
-            current = nextPrime(current);
-            
-        } while(current<SIEVE_SIZE);
-        System.out.println("Found seq ending at " + seqEnd + " length is " + seqLength);
- 
+            currentStart = nextPrime(currentStart);
+            sum = currentStart;
+            length = 1;
+            currentEnd = currentStart;
+            do {
+                currentEnd = nextPrime(currentEnd);
+                sum+=currentEnd;
+                length++;
+                if (sum<MAX_NUMBER && isPrime(sum)) {
+                    if (length>maxSeqFound) {
+                        maxSeqFound = length;
+                        maxSeqValue = sum;
+                    }
+                }
+            } while(sum<MAX_NUMBER && currentEnd<MAX_NUMBER);
+
+        } while(currentStart<MAX_NUMBER);
+        System.out.println("Found seq below " + MAX_NUMBER + " ending at " + maxSeqValue + " length is " + maxSeqFound);
     }
 }
