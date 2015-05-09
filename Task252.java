@@ -31,11 +31,31 @@ public class Task252 {
 
     private static Point points[] = new Point[TOTAL_POINTS];
 
+    static class TreePoint {
+
+    }
+
+    static class TreeNode {
+        TreeNode nodes[];
+        boolean isPoint() { return false; }
+    }
+
+    static class PointNode extends TreeNode {
+        double x;
+        double y;
+        boolean isPoint() { return true; }
+    }
+
+    static void buildTree(Point points) {
+        TreeNode root = new TreeNode();
+    }
+
+
     public static void main(String[] args) {
         for(int i=0;i<TOTAL_POINTS;i++) {
             points[i] = new Point(nextCoordinate(), nextCoordinate());
         }
-        // total number of pairs: 500*500 = 250000
+        // количество пар: 500*500;2 = 500000
         // возьмем пару и будем строить от нее полигон 
         //       добавляя треугольники проверяя не попала ли какая вершина в треугольник
         // если попала берем следующий треугольник
